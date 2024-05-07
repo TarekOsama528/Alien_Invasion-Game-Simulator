@@ -1,0 +1,29 @@
+Td	ID	Tj	Df	Dd	Db
+0	3	10	0	0	0
+0	9	18	0	0	0
+0	2040	26	0	0	0
+0	2049	30	0	0	0
+0	32	30	0	0	0
+0	52	39	0	0	0
+Battle Result	Draw
+
+For Earth Army: 
+Total number of each unit	52 ES	12 ET	6 EG	5 EH	
+Percentage of  destructed units relative to their total	ES	ET	EG	EH
+                                                       	0	33.3333	0	0
+Percentage of total destructed unit relative to total units	5.33333
+Average of Df	Average of Dd	Average of Db
+       0       	0	       0
+Df/Db %	Dd/Db %
+-nan(ind)	-nan(ind)
+
+
+For Alien Army: 
+Total number of each unit 	81 AS	6 AM	3 AD	
+Percentage of  destructed units relative to their total	AS	AM	AD
+                                                       	0	0	66.6667
+Percentage of total destructed unit relative to total units	2.22222
+Average of Df	Average of Dd	Average of Db
+       0       	0	       0
+Df/Db %	Dd/Db %
+-nan(ind)	-nan(ind)
