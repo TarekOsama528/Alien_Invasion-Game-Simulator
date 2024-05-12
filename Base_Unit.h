@@ -1,8 +1,9 @@
 #pragma once
 #include<iostream>
+//#include"ES.h"
 using namespace std;
-
 class GameManager;
+
 class Unit
 {
 protected:
@@ -20,6 +21,7 @@ protected:
 	int Dd;
 	int Db;
 	int UAP;
+	bool infection;
 public:
 	void setIH(int ih);
 	int getIH();
@@ -40,6 +42,7 @@ public:
 	void setDf();
 	void setDd();
 	void setDb();
+
 	void setUAP(int Health);
 	void setGM(GameManager* gm);
 
@@ -54,6 +57,12 @@ public:
 	int getUAP();
 	GameManager* getGM();
 	virtual void attack(){}
+
+	void setinfection(bool infection);
+
+	bool getinfection();
+
+
 };
 
  static ostream& operator<<(ostream& display, Unit uni) {
@@ -61,7 +70,14 @@ public:
 	return display;
 }
  static ostream& operator<<(ostream& display, Unit* uni) {
-	display << uni->getid();
+
+	if (uni->getinfection())
+	{
+		display << "\033[1;32m"<< "inf_" << uni->getid() << "\033[0m";
+	}
+	else {
+		display << uni->getid();
+	}
 	return display;
 }
 

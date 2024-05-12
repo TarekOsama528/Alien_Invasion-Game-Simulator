@@ -84,6 +84,14 @@ int Unit::getUAP() {
 GameManager* Unit::getGM() {
 	return GM;
 }
+void Unit:: setinfection(bool ifection)
+{
+	infection = ifection;
+}
+bool Unit::getinfection()
+{
+	return infection;
+}
 void Unit::setIH(int ih) {
 	IH = ih;
 }

@@ -3,6 +3,10 @@
 //#include "SpecialQueue.h"
 //#include <string>
 
+AllyArmy* GameManager::Getally() {
+	return &ally;
+}
+
 void GameManager::kill(Unit* unit) {
 	KilledList.enqueue(unit);
 }
@@ -11,6 +15,9 @@ priQueue<ES*> GameManager::getUMLsoldier() {
 }
 void GameManager::removesoldier(ES*& es,int& k) {
 	UMLsoldier.dequeue(es, k);
+}
+void GameManager::removetank(ET*& et) {
+	UMLtank.dequeue(et);
 }
 void GameManager::aidsoldier(ES* unit,int pri) {
 	UMLsoldier.enqueue(unit, pri);
@@ -218,7 +225,10 @@ void GameManager::print1() {
 	cout << "==============Alien Army Alive Units ==============\n";
 	Aliens.Alienprint();
 	cout << endl;
-	cout << "============== Unit Fighting at current timestep ==============\n";
+	cout << "==============Ally Army Alive Units ==============\n";
+	ally.print();
+	cout << endl;
+	cout << "============== Units Fighting at current timestep ==============\n";
 }
 void GameManager::print2() {
 	cout << endl;
@@ -231,6 +241,11 @@ void GameManager::print2() {
 	cout << KilledList.getcount() << " ";
 	KilledList.print();
 	cout << endl;
+	Earth.Calc_inf_Perc();
+
+	cout << "Percentage of Infection: "<< round(Earth.getinfection_Per())<<"%";
+	cout << endl;
+
 }
 void GameManager::SimulatePhase1()
 {
@@ -555,6 +570,8 @@ void GameManager::simulate_phase2() {
 			}
 			Earth.attack();
 			Aliens.attack();
+			ally.attack();
+			Earth.spreadinfection();
 			if (mode == "Interactive") {
 				print2();
 			}

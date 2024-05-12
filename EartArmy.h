@@ -20,6 +20,7 @@ class EarthArmy {
 	int Ecounter;
 	bool critical;
 	int ES_Created, ET_Created, EG_Created,EH_Created;
+	double infection_Per;
 public:
 	//Constructor to set the Counter
 	EarthArmy();
@@ -42,11 +43,15 @@ public:
 	priQueue<EG*>& GetEGunnery();
 	LinkedStack<HU*>& GetHeal();
 	int getCounter();
+
 	int get_ESCreated();
 	int get_ETCreated();
 	int get_EGCreated();
 	int get_EHCreated();
 	void attack();
+	void spreadinfection();
+	void Calc_inf_Perc();
+	double getinfection_Per();
 };
 
 

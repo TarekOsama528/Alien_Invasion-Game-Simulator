@@ -129,6 +129,7 @@
   <ItemGroup>
     <ClCompile Include="AlienArmy.cpp" />
     <ClCompile Include="AlienProject.cpp" />
+    <ClCompile Include="AllyArmy.cpp" />
     <ClCompile Include="AM.cpp" />
     <ClCompile Include="AS.cpp" />
     <ClCompile Include="Base_Unit.cpp" />
@@ -140,9 +141,11 @@
     <ClCompile Include="GameManager.cpp" />
     <ClCompile Include="HU.cpp" />
     <ClCompile Include="RandomGenerator.cpp" />
+    <ClCompile Include="SU.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AlienArmy.h" />
+    <ClInclude Include="AllyArmy.h" />
     <ClInclude Include="AM.h" />
     <ClInclude Include="ArrayBAG.h" />
     <ClInclude Include="AS.h" />
@@ -163,6 +166,7 @@
     <ClInclude Include="priQueue.h" />
     <ClInclude Include="QueueADT.h" />
     <ClInclude Include="StackADT.h" />
+    <ClInclude Include="SU.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

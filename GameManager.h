@@ -1,6 +1,7 @@
 
 #pragma once
 #include "AlienArmy.h"
+#include "AllyArmy.h"
 #include "Base_Unit.h"
 #include "EartArmy.h"
 #include "LinkedQueue.h"
@@ -17,6 +18,7 @@ class GameManager
 private:
 	AlienArmy Aliens;
 	EarthArmy Earth;
+	AllyArmy ally;
 	RandomGenerator RandGen;
 	LinkedQueue <Unit*> KilledList;
 	priQueue<ES*> UMLsoldier;
@@ -26,6 +28,7 @@ private:
 	string OpMode;
 
 public:
+	AllyArmy* Getally();
 	bool setOpMode(string mode);
 	bool setResult(string result);
 	string SelectMode();
@@ -34,6 +37,7 @@ public:
 	void aidsoldier(ES* unit,int pri);
 	void aidtank(ET* tank);
 	void removesoldier(ES*& es,int& k);
+	void removetank(ET*& et);
 	priQueue<ES*> getUMLsoldier();
 	LinkedQueue<ET*> getUMLtank();
 	GameManager(); //Constructor to initilaize Time step and 

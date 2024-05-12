@@ -35,8 +35,20 @@ void HU::attack() {
 			c++;
 			healed = true;
 			fightlist.enqueue(es);
-			es->sethealth(gethealth() + imp);
+			if (!es->getinfection())
+			{
+				es->sethealth(gethealth() + imp);
+			}
+			else if (es->getinfection())
+			{
+				es->sethealth(gethealth() + imp / 2);
+			}
 			if (es->gethealth() >= 20) {
+				if (es->getinfection())
+				{
+					es->setinfection(false);
+					es->setimmunity(true);
+				}
 				getGM()->GetEarth()->addEsoldier(es);
 			}
 			else {
@@ -58,7 +70,7 @@ void HU::attack() {
 
 	for  (int i= 0;i<getattack()-c;i++) {
 		et = NULL;
-		getGM()->getUMLtank().dequeue(et);
+		getGM()->removetank(et);
 		if (et && et->getaid() - getGM()->getTimestep() <= 10) {
 			fightlist.enqueue(et);
 			healed = true;

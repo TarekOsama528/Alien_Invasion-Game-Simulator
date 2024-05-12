@@ -54,6 +54,12 @@
     <ClCompile Include="Drones.cpp">
       <Filter>Header Files</Filter>
     </ClCompile>
+    <ClCompile Include="SU.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="AllyArmy.cpp">
+      <Filter>Header Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="QueueADT.h">
@@ -117,6 +123,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="HU.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SU.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="AllyArmy.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -9,6 +9,7 @@ EarthArmy::EarthArmy()
 	ET_Created = 0;
 	EG_Created = 0;
 	EH_Created = 0;
+	//num_inf = 0;
 	critical = false;
 }
 void EarthArmy::addtank(ET *tank) {
@@ -91,6 +92,24 @@ int EarthArmy::getCounter()
 {
 	return Ecounter;
 }
+//int EarthArmy::getnumberofinfected()
+//{
+//	ES* es = NULL;
+//	LinkedQueue<ES*> estempq;
+//	while (queueEsoldier.dequeue(es))
+//	{
+//		if (es->getinfection())
+//		{
+//			num_inf++;
+//		}
+//		estempq.enqueue(es);
+//	}
+//	while (estempq.dequeue(es))
+//	{
+//		queueEsoldier.enqueue(es);
+//	}
+//	return num_inf;
+//}
 int EarthArmy::get_ESCreated()
 {
 	return ES_Created;
@@ -144,4 +163,92 @@ void EarthArmy::attack() {
 	if (hu) {
 		hu->attack();
 	}
+}
+
+void EarthArmy::spreadinfection()
+{
+	ES* es = NULL;
+	LinkedQueue<ES*> inf_es_temp;
+	LinkedQueue<ES*> es_temp;
+	LinkedQueue<ES*> new_infected;
+	int healthy_index_array[1000];
+	int infectedcount = 0;
+	int healthy_array_count=0;
+	int not_inf_index=0;
+	while (queueEsoldier.dequeue(es))
+	{
+		if (es->getinfection())
+		{
+			inf_es_temp.enqueue(es);
+			infectedcount++;
+		}
+		else if(!es->getinfection() && !es->getimmunity())
+		{
+			healthy_index_array[healthy_array_count] = not_inf_index;
+			healthy_array_count++;
+		}
+		not_inf_index++;
+		es_temp.enqueue(es);
+	}
+	while (es_temp.dequeue(es))
+	{
+		queueEsoldier.enqueue(es);
+	}
+	int random_soldeir_index;
+	int counter;
+	for (int i = 0; i < infectedcount; i++)
+	{
+
+		if ((rand() % 100) < 2)
+		{
+			random_soldeir_index = rand() % healthy_array_count;
+			counter = 0;
+			while (queueEsoldier.dequeue(es))
+			{
+				if (counter == healthy_index_array[random_soldeir_index])
+				{
+					es->setinfection(true);
+					//es->setid(es->getid() + 1000);
+					new_infected.enqueue(es);
+				}
+				counter++;
+				es_temp.enqueue(es);
+			}
+			healthy_index_array[random_soldeir_index] = healthy_index_array[healthy_array_count-1];
+			healthy_array_count--;
+			while (es_temp.dequeue(es))
+			{
+				queueEsoldier.enqueue(es);
+			}
+		}
+	}
+	
+}
+
+void EarthArmy::Calc_inf_Perc()
+{
+	int Total_es_count = 0;
+	int Total_inf_es=0;
+	ES* es = NULL;
+	LinkedQueue<ES*> tempesq;
+	while (queueEsoldier.dequeue(es))
+	{
+		if (es->getinfection())
+		{
+			Total_inf_es++;
+		}
+		Total_es_count++;
+
+		tempesq.enqueue(es);
+	}
+	while (tempesq.dequeue(es))
+	{
+		queueEsoldier.enqueue(es);
+	}
+	infection_Per = (static_cast<double>(Total_inf_es) / Total_es_count) * 100;
+}
+
+double EarthArmy::getinfection_Per()
+{
+	return infection_Per;
 }
