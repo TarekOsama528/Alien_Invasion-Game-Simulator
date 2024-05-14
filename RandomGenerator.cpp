@@ -81,6 +81,14 @@ void RandomGenerator::setGameManager(GameManager* g)
 {
     gManger = g;
 }
+void RandomGenerator::setinf_Prob(double inf_Prob)
+{
+    infection_Prob = inf_Prob;
+}
+double RandomGenerator::getinf_Prob()
+{
+    return infection_Prob;
+}
 int RandomGenerator::getProb()
 {
     return Prob;

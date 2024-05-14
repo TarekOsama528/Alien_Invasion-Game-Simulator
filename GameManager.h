@@ -26,6 +26,7 @@ private:
 	int Timestep;
 	string BattleResult;
 	string OpMode;
+	double inf_Prob;
 
 public:
 	AllyArmy* Getally();
@@ -56,6 +57,8 @@ public:
 
 	void print1();
 	void print2();
+
+	double getinf_Prob();
 	//Function To sort Destructed Unit
 	//priQueue<Unit*> SortKilledList();
 

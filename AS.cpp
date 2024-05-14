@@ -39,7 +39,7 @@ void AS::attack() {
 					es->setDb();
 					getGM()->kill(es);
 				}
-				else if (es->gethealth() < 40) { //this should be changed to 0.2*initial health
+				else if (es->gethealth() < 0.2*es->getIH()) { //this should be changed to 0.2*initial health
 					getGM()->aidsoldier(es, 100 - es->gethealth());
 					es->setaid(getGM()->getTimestep());
 				}

@@ -12,6 +12,7 @@ private:
 	int Max_Earth_Health, Max_Earth_Power, Max_Earth_Capacity;
 	int Min_Alien_Health, Min_Alien_Power, Min_Alien_Capacity;
 	int Max_Alien_Health, Max_Alien_Power, Max_Alien_Capacity;
+    double infection_Prob;
 	GameManager* gManger;
 public:
 	RandomGenerator();
@@ -39,6 +40,9 @@ public:
     void setACap(int minCapacity, int maxCapacity);
     void setGameManager(GameManager* gm);
 
+    void setinf_Prob(double inf_Prob);
+
+    double getinf_Prob();
     // Getters
     /*int getES_Percentage() const;
     int getET_Percentage() const;

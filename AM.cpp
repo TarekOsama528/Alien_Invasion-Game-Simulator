@@ -32,16 +32,18 @@ void AM::attack() {
 			getGM()->GetEarth()->removeEsoldier(es);
 			if (es) {
 				fightlist.enqueue(es);
+				int IH = es->gethealth();
 				setUAP(es->gethealth()); //used UAP
 				es->sethealth(es->gethealth() - getUAP());
-				infection_prob =(rand() % 100) < 10;
+				infection_prob =(rand() % 100) < GM->getinf_Prob();
 				if (es->getTa() == 0) es->setTa(getGM()->getTimestep());
 				es->setDf();
 				if (es->gethealth() <= 0) {
 					if (infection_prob && !(es->getinfection()) && !(es->getimmunity()))
 					{
 						es->setinfection(true);
-						es->sethealth(es->getIH());
+						es->sethealth(IH);
+						estemp.enqueue(es);
 					}
 					else
 					{

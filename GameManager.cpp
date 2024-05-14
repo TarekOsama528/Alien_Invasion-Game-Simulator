@@ -110,7 +110,7 @@ bool GameManager::GetInput()
 		MyfileHandler >> unit_Number;
 		MyfileHandler >> ES_Percentage >> ET_Percentage >> EG_Percentage >> EH_Percentage;
 		MyfileHandler >> AS_Percentage >> AM_Percentage >> AD_Percentage;
-		MyfileHandler >> Prob;
+		MyfileHandler >> Prob >> inf_Prob;
 		if (EH_Percentage > 5 || (ES_Percentage+ ET_Percentage+ EG_Percentage+ EH_Percentage)!=100|| (AS_Percentage + AM_Percentage + AD_Percentage )!=100)
 		{
 			cout << "Error In Percentages" << endl;
@@ -139,6 +139,7 @@ bool GameManager::GetInput()
 			RandGen.setET_Percentage(ET_Percentage);
 			RandGen.setEG_Percentage(EG_Percentage);
 			RandGen.setEH_Percentage(EH_Percentage);
+			//RandGen.setinf_Prob(inf_Prob);
 			//Alien Data
 			RandGen.setAS_Percentage(AS_Percentage);
 			RandGen.setAM_Percentage(AM_Percentage);
@@ -246,6 +247,10 @@ void GameManager::print2() {
 	cout << "Percentage of Infection: "<< round(Earth.getinfection_Per())<<"%";
 	cout << endl;
 
+}
+double GameManager::getinf_Prob()
+{
+	return inf_Prob;
 }
 void GameManager::SimulatePhase1()
 {
@@ -559,11 +564,12 @@ void GameManager::SilentMode() // Can Be modified Later to use Timers
 //}
 
 void GameManager::simulate_phase2() {
-	string mode= SelectMode();
+	string mode = SelectMode();
 	if (true) {
 		GetInput();
-		
-		while (getTimestep() <= 40 || getBattleResult()=="Draw") {
+
+
+		while ((getTimestep() <= 40 || getBattleResult() == "Draw") && getTimestep() <= 500) {
 			RandGen.RandomUnitGenratorAlgortihm();
 			if (mode == "Interactive") {
 				print1();
@@ -574,17 +580,21 @@ void GameManager::simulate_phase2() {
 			Earth.spreadinfection();
 			if (mode == "Interactive") {
 				print2();
+				cout << "Press Enter to continue..." << endl;
+				cin.get();
 			}
-			if ((Earth.GetEGunnery().getcount() + Earth.GetETank().getcount() + Earth.GetESoldier().getcount() + Earth.GetHeal().getcount()) == 0) {
-				setResult("Lose");
+			if ((Earth.GetEGunnery().getcount() + Earth.GetETank().getcount() + Earth.GetESoldier().getcount()) == 0) {
+				setResult("Loss");
 			}
 			else if ((Aliens.GetADrone().getcount() + Aliens.GetAMonster().getcount() + Aliens.GetASoldier().getcount()) == 0) {
 				setResult("Win");
 			}
-			cout << "Press Enter to continue..." << endl;
-			cin.get();
 			setTimestep(getTimestep() + 1);
-		}	
+		}
+	}
+	if (mode == "Silent")
+	{
+		SilentMode();
 	}
 	ProduceOutputFile();
 }

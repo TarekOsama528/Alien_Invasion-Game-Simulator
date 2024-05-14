@@ -227,8 +227,8 @@ void EarthArmy::spreadinfection()
 
 void EarthArmy::Calc_inf_Perc()
 {
-	int Total_es_count = 0;
-	int Total_inf_es=0;
+	double Total_es_count = (double)queueEsoldier.getcount();
+	double Total_inf_es=0;
 	ES* es = NULL;
 	LinkedQueue<ES*> tempesq;
 	while (queueEsoldier.dequeue(es))
@@ -237,15 +237,13 @@ void EarthArmy::Calc_inf_Perc()
 		{
 			Total_inf_es++;
 		}
-		Total_es_count++;
-
 		tempesq.enqueue(es);
 	}
 	while (tempesq.dequeue(es))
 	{
 		queueEsoldier.enqueue(es);
 	}
-	infection_Per = (static_cast<double>(Total_inf_es) / Total_es_count) * 100;
+	infection_Per = ((Total_inf_es) / Total_es_count) * 100;
 }
 
 double EarthArmy::getinfection_Per()
