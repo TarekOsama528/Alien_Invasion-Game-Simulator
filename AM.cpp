@@ -35,17 +35,21 @@ void AM::attack() {
 				setUAP(es->gethealth()); //used UAP
 				es->sethealth(es->gethealth() - getUAP());
 				infection_prob =(rand() % 100) < 10;
-				if (infection_prob && !(es->getinfection()) && !(es->getimmunity()))
-				{
-					es->setinfection(true);
-				}
 				if (es->getTa() == 0) es->setTa(getGM()->getTimestep());
 				es->setDf();
 				if (es->gethealth() <= 0) {
-					es->setTd(getGM()->getTimestep());
-					es->setDd();
-					es->setDb();
-					getGM()->kill(es);
+					if (infection_prob && !(es->getinfection()) && !(es->getimmunity()))
+					{
+						es->setinfection(true);
+						es->sethealth(es->getIH());
+					}
+					else
+					{
+						es->setTd(getGM()->getTimestep());
+						es->setDd();
+						es->setDb();
+						getGM()->kill(es);
+					}
 				}
 				else if (es->gethealth() < 0.20 * es->getIH()) {
 					getGM()->aidsoldier(es, 100 - es->gethealth());

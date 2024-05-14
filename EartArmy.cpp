@@ -199,7 +199,7 @@ void EarthArmy::spreadinfection()
 	for (int i = 0; i < infectedcount; i++)
 	{
 
-		if ((rand() % 100) < 2)
+		if ((rand() % 100) < 2 && healthy_array_count !=0)
 		{
 			random_soldeir_index = rand() % healthy_array_count;
 			counter = 0;
