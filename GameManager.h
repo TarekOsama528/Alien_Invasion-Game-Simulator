@@ -10,6 +10,7 @@
 #include <fstream>
 #include<string>
 #include <windows.h> // For Sleep function
+#include <conio.h>
 
 
 //#include <sstream>
@@ -27,8 +28,11 @@ private:
 	string BattleResult;
 	string OpMode;
 	double inf_Prob;
+	int inf_thres;
 
 public:
+	void killally();
+	void removesave(SU*& su);
 	AllyArmy* Getally();
 	bool setOpMode(string mode);
 	bool setResult(string result);
@@ -54,10 +58,14 @@ public:
 	bool ProduceOutputFile();
 	void SilentMode();
 	void simulate_phase2();
+	int getinf_thres();
 
 	void print1();
 	void print2();
-
+	void Color(int Color);
+	void gotoxy(int x, int y);
+	void clearScreen();
+	int SelectSencario();
 	double getinf_Prob();
 	//Function To sort Destructed Unit
 	//priQueue<Unit*> SortKilledList();

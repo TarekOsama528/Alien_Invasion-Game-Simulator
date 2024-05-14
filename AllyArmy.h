@@ -11,14 +11,20 @@ using namespace std;
 
 class AllyArmy {
 	LinkedQueue<SU*> queueSaver;
+	int Infection_Percentage;
+	int AllyCounter;
 
 public:
+	AllyArmy();
 	void attack();
 	void print();
 	LinkedQueue<SU*> getsaver();
 	void withdraw();
-	void addsaver(SU* su);
+	void addsaver(Unit* su);
 	void removesaver(SU*& su);
+	void setInfectionPercentage(int per);
+	int getCounter();
+
 };
 
 

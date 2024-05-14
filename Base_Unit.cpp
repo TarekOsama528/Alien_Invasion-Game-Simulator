@@ -92,6 +92,10 @@ bool Unit::getinfection()
 {
 	return infection;
 }
+Unit::Unit()
+{
+	infection = false;
+}
 void Unit::setIH(int ih) {
 	IH = ih;
 }

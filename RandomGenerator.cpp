@@ -7,10 +7,15 @@ RandomGenerator::RandomGenerator()
 {
     SetSeed(time(0));
     srand(SeedValue);
+    SaverFlag = 0;
 }
 void RandomGenerator::SetSeed(int number)
 {
     SeedValue = number;
+}
+void RandomGenerator::setSaverFlag(int prob)
+{
+    SaverFlag = prob;
 }
 void RandomGenerator::SetNumber(int number)
 {
@@ -47,6 +52,10 @@ void RandomGenerator::setAD_Percentage(int percentage) {
 void RandomGenerator::setProb(int probability) {
     Prob = probability;
 }
+void RandomGenerator::setInfection_Thres(int probability)
+{
+    Infection_Thershold = probability;
+}
 
 void RandomGenerator::setEHealth(int minHealth, int maxHealth) {
     Min_Earth_Health = minHealth;
@@ -81,14 +90,7 @@ void RandomGenerator::setGameManager(GameManager* g)
 {
     gManger = g;
 }
-void RandomGenerator::setinf_Prob(double inf_Prob)
-{
-    infection_Prob = inf_Prob;
-}
-double RandomGenerator::getinf_Prob()
-{
-    return infection_Prob;
-}
+
 int RandomGenerator::getProb()
 {
     return Prob;
@@ -158,6 +160,11 @@ Unit* RandomGenerator::CreateUnit(int B,string type)
             temp = new AD(Health, Cap, gManger->getTimestep(), Power, gManger->GetAlien()->getCounter(),gManger);
         }
     }
+    else if (type == "Saver Unit")
+    {
+        GenerateStats(Power, Health, Cap, "Earth");
+        temp=new SU(Health, Cap, gManger->getTimestep(), Power, gManger->Getally()->getCounter(), gManger);
+    }
     return temp;
 }
 void RandomGenerator::RandomUnitGenratorAlgortihm()
@@ -185,4 +192,33 @@ void RandomGenerator::RandomUnitGenratorAlgortihm()
             gManger->GetAlien()->addAlienUnit(inputUnit);
         }
     }
+    if (gManger->GetEarth()->getinfection_Per() >= Infection_Thershold && SaverFlag == 0)
+    {
+        SaverFlag = 1;
+        for (int i = 0; i < getNumber(); i++)
+        {
+            B = (rand() % 100) + 1;
+            //cout << "The Number Generated is" << B << endl;
+            inputUnit = CreateUnit(B, "Saver Unit");
+            //cout << "The Type of created alien is:" << inputUnit->gettype() << endl;
+            gManger->Getally()->addsaver(inputUnit);
+        }
+    }
+    else if (gManger->GetEarth()->getinfection_Per() > 0 && SaverFlag == 1)
+    {
+        for (int i = 0; i < getNumber(); i++)
+        {
+            SaverFlag = 1;
+            B = (rand() % 100) + 1;
+            //cout << "The Number Generated is" << B << endl;
+            inputUnit = CreateUnit(B, "Saver Unit");
+            //cout << "The Type of created alien is:" << inputUnit->gettype() << endl;
+            gManger->Getally()->addsaver(inputUnit);
+        }
+    }
+    if (gManger->GetEarth()->getinfection_Per() == 0 && SaverFlag == 1)
+    {
+        SaverFlag = 2;
+    }
+
 }

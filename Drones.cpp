@@ -89,7 +89,7 @@ void AD::attack(){
 
 	if (getGM()->getOpMode() == "Interactive") {
 		cout << "AD " << fightlist.getcount() << " shots "; fightlist.print();
-		cout << " IDs of all Earth units shot by AD " << getid() << endl;
+		cout << " IDs of all Earth units shot by AD" << getid() << endl;
 	}
 
 }

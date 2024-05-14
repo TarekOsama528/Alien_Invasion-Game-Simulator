@@ -5,6 +5,7 @@ class GameManager;
 class RandomGenerator
 {
 private:
+    int SaverFlag;
 	int SeedValue;
 	int unit_Number;
 	int ES_Percentage, ET_Percentage, EG_Percentage,EH_Percentage, AS_Percentage, AM_Percentage, AD_Percentage, Prob;
@@ -12,7 +13,7 @@ private:
 	int Max_Earth_Health, Max_Earth_Power, Max_Earth_Capacity;
 	int Min_Alien_Health, Min_Alien_Power, Min_Alien_Capacity;
 	int Max_Alien_Health, Max_Alien_Power, Max_Alien_Capacity;
-    double infection_Prob;
+    double  Infection_Thershold;
 	GameManager* gManger;
 public:
 	RandomGenerator();
@@ -30,19 +31,16 @@ public:
     void setAM_Percentage(int percentage);
     void setAD_Percentage(int percentage);
     void setProb(int probability);
-
+    void setInfection_Thres(int probability);   //Function To Get Infection Probability
     void setEHealth(int minHealth, int maxHealth);
     void setEPower(int minPower, int maxPower);
     void setECap(int minCapacity, int maxCapacity);
-
+    void setSaverFlag(int flag);
     void setAHealth(int minHealth, int maxHealth);
     void setAPower(int minPower, int maxPower);
     void setACap(int minCapacity, int maxCapacity);
     void setGameManager(GameManager* gm);
 
-    void setinf_Prob(double inf_Prob);
-
-    double getinf_Prob();
     // Getters
     /*int getES_Percentage() const;
     int getET_Percentage() const;

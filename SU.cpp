@@ -17,6 +17,7 @@ SU::SU(int h, int attackcap, int join, int p, int ID, GameManager* gm)
 	setpower(p);
 	settype("Saver Unit");
 	setTa(0);
+	setinfection(false);
 }
 
 void SU::attack()

@@ -61,7 +61,7 @@ void AS::attack() {
 					su->setTd(getGM()->getTimestep());
 					su->setDd();
 					su->setDb();
-					//getGM()->Getally()->removesaver(su);
+					getGM()->kill(su);
 				}
 				else {
 					sutemp.enqueue(su);
@@ -80,6 +80,6 @@ void AS::attack() {
 
 	if (getGM()->getOpMode() == "Interactive") {
 		cout << "AS " << fightlist.getcount() << " shots "; fightlist.print();
-		cout << " IDs of all Earth/Ally units shot by AS " << getid() << endl;
+		cout << " IDs of all Earth/Ally units shot by AS" << getid() << endl;
 	}
 }

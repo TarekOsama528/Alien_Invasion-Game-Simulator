@@ -196,8 +196,8 @@ LinkedQueue<T>::~LinkedQueue()
 	cout << "\nFreeing all nodes in the queue...";*/
 
 	//Free all nodes in the queue
-	T temp;
-	while (dequeue(temp));
+	/*T temp;
+	while (dequeue(temp));*/
 
 	/*cout << "\n Is LinkedQueue Empty now?? ==> " << boolalpha << isEmpty();
 	cout << "\nEnding LinkedQueue destructor..." << endl;*/

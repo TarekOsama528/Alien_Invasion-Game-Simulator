@@ -9,7 +9,9 @@ EarthArmy::EarthArmy()
 	ET_Created = 0;
 	EG_Created = 0;
 	EH_Created = 0;
-	//num_inf = 0;
+	infection_count=0;
+	healed_soldeir_count = 0;
+	healed_Tanks_count = 0;
 	critical = false;
 }
 void EarthArmy::addtank(ET *tank) {
@@ -208,7 +210,7 @@ void EarthArmy::spreadinfection()
 				if (counter == healthy_index_array[random_soldeir_index])
 				{
 					es->setinfection(true);
-					//es->setid(es->getid() + 1000);
+					increment_inf();
 					new_infected.enqueue(es);
 				}
 				counter++;
@@ -243,10 +245,47 @@ void EarthArmy::Calc_inf_Perc()
 	{
 		queueEsoldier.enqueue(es);
 	}
-	infection_Per = ((Total_inf_es) / Total_es_count) * 100;
+	if (Total_es_count != 0)
+	{
+		infection_Per = ((Total_inf_es) / Total_es_count) * 100;
+	}
+	else
+	{
+		infection_Per = 0;
+	}
 }
 
 double EarthArmy::getinfection_Per()
 {
 	return infection_Per;
+}
+
+void EarthArmy::increment_inf()
+{
+	infection_count++;
+}
+
+double EarthArmy::getinfectioncount()
+{
+	return infection_count;
+}
+
+double EarthArmy::gethealed_soldeir_count()
+{
+	return healed_soldeir_count;
+}
+
+double EarthArmy::gethealed_Tank_count()
+{
+	return healed_Tanks_count;
+}
+
+void EarthArmy::increment_healed_soldeir()
+{
+	healed_soldeir_count++;
+}
+
+void EarthArmy::increment_healed_Tank()
+{
+	healed_Tanks_count++;
 }

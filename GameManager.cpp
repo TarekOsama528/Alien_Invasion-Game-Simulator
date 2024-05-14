@@ -3,6 +3,24 @@
 //#include "SpecialQueue.h"
 //#include <string>
 
+
+void GameManager::killally() {
+	SU* su = NULL;
+	while (!ally.getsaver().isEmpty()) {
+		su = NULL;
+		ally.removesaver(su);
+		if (su) {
+			su->setTd(getTimestep());
+			su->setDd();
+			su->setDb();
+			kill(su);
+		}
+	}
+}
+void GameManager::removesave(SU*& su) {
+	ally.removesaver(su);
+}
+
 AllyArmy* GameManager::Getally() {
 	return &ally;
 }
@@ -59,6 +77,8 @@ bool GameManager::setResult(string result)
 string GameManager::getOpMode() 
 {
 	return OpMode ;
+
+
 }
 
 string GameManager::getBattleResult() 
@@ -98,20 +118,45 @@ RandomGenerator* GameManager::getRandomGen()
 }
 bool GameManager::GetInput()
 {
+	int FileNumber = SelectSencario();
+	Color(7);
 	int unit_Number;
-	double ES_Percentage, ET_Percentage, EG_Percentage, EH_Percentage,AS_Percentage, AM_Percentage, AD_Percentage, Prob;
+	double ES_Percentage, ET_Percentage, EG_Percentage, EH_Percentage, AS_Percentage, AM_Percentage, AD_Percentage, Prob;
 	double Ranges[12];
 	string input_text;
 	fstream MyfileHandler;
-	MyfileHandler.open("Input.txt.txt", ios::in);
+	switch (FileNumber) {
+	case 1:
+		MyfileHandler.open("Input_files/Input_1.txt", ios::in); //weak earth strong alien
+		break;
+	case 2:
+		MyfileHandler.open("Input_files/Input_2.txt", ios::in); //weak alien strong earth
+		break;
+	case 3:
+		MyfileHandler.open("Input_files/Three.txt", ios::in); //mid equal
+		break;
+	case 4:
+		MyfileHandler.open("Input_files/Input_4.txt", ios::in); //mid earth strong alien
+		break;
+	case 5:
+		MyfileHandler.open("Input_files/Input_5.txt", ios::in); //mid alien strong earth
+		break;
+	case 6:
+		MyfileHandler.open("Input_files/Input_6.txt", ios::in); //infection zero and mid earth strong alien
+		break;
+	default:
+		MyfileHandler.open("Input.txt.txt", ios::in);
+		break;
+	}
+	//MyfileHandler.open("Input.txt.txt", ios::in);
 	if (MyfileHandler.is_open())
 	{
 		//cout << "I Am in if Condittion\n"; 
 		MyfileHandler >> unit_Number;
 		MyfileHandler >> ES_Percentage >> ET_Percentage >> EG_Percentage >> EH_Percentage;
 		MyfileHandler >> AS_Percentage >> AM_Percentage >> AD_Percentage;
-		MyfileHandler >> Prob >> inf_Prob;
-		if (EH_Percentage > 5 || (ES_Percentage+ ET_Percentage+ EG_Percentage+ EH_Percentage)!=100|| (AS_Percentage + AM_Percentage + AD_Percentage )!=100)
+		MyfileHandler >> Prob >>inf_Prob >> inf_thres;
+		if (EH_Percentage > 5 || (ES_Percentage + ET_Percentage + EG_Percentage + EH_Percentage) != 100 || (AS_Percentage + AM_Percentage + AD_Percentage) != 100)
 		{
 			cout << "Error In Percentages" << endl;
 			return false;
@@ -134,18 +179,17 @@ bool GameManager::GetInput()
 			//---------------------------------------------------------------------------------
 			RandGen.SetNumber(unit_Number);
 			//Earth Data
-			RandGen.SetNumber(unit_Number);
+			//RandGen.SetNumber(unit_Number);
 			RandGen.setES_Percentage(ES_Percentage);
 			RandGen.setET_Percentage(ET_Percentage);
 			RandGen.setEG_Percentage(EG_Percentage);
 			RandGen.setEH_Percentage(EH_Percentage);
-			//RandGen.setinf_Prob(inf_Prob);
 			//Alien Data
 			RandGen.setAS_Percentage(AS_Percentage);
 			RandGen.setAM_Percentage(AM_Percentage);
 			RandGen.setAD_Percentage(AD_Percentage);
 			RandGen.setProb(Prob);
-
+			RandGen.setInfection_Thres(inf_thres);
 			int counter = 0;
 			for (int i = 0; i < 6; i++)
 			{
@@ -374,9 +418,9 @@ bool GameManager::ProduceOutputFile()
 	fstream MyfileHandler;
 	Unit* temp = NULL;
 	string unit_type;
-	double Destrcuted[7] = {0,0,0,0,0,0,0}; //Destruction unit of ES,ET,EG,EH,AS,AM,AD
-	double sumOfDs[6] = {0,0,0,0,0,0};//Has format of[DF Earth,Dd Earth,Db Earth,Df Alien,Dd Alien,Db Alien]
-	int CountOfEarth=0, CountOfAlien = 0;
+	double Destrcuted[8] = {0,0,0,0,0,0,0,0}; //Destruction unit of ES,ET,EG,EH,AS,AM,AD
+	double sumOfDs[9] = {0,0,0,0,0,0,0,0,0};//Has format of[DF Earth,Dd Earth,Db Earth,Df Alien,Dd Alien,Db Alien,Df Saver,Dd Saver,Db Sacer]
+	int CountOfEarth = 0, CountOfAlien = 0, CountOfSaver = 0;
 	MyfileHandler.open("OutputFile.txt", ios::out);
 	if (MyfileHandler.is_open())
 	{
@@ -395,6 +439,7 @@ bool GameManager::ProduceOutputFile()
 				sumOfDs[1] = sumOfDs[1] + temp->getDd();
 				sumOfDs[2] = sumOfDs[2] + temp->getDb();
 				CountOfEarth++;
+
 
 			}
 			else if (unit_type == "Tank")
@@ -456,10 +501,54 @@ bool GameManager::ProduceOutputFile()
 				sumOfDs[5] = sumOfDs[5] + temp->getDb();
 				CountOfAlien++;
 			}
+			else if (unit_type == "Saver Unit")
+			{
+				//cout << "I am Heal hey \n";
+				Destrcuted[7] = Destrcuted[7] + 1;
+				sumOfDs[6] = sumOfDs[6] + temp->getDf();
+				sumOfDs[7] = sumOfDs[7] + temp->getDd();
+				sumOfDs[8] = sumOfDs[8] + temp->getDb();
+				CountOfSaver++;
+			}
 
 			else
 			{
 			}
+			//ES* tempSoldier = NULL;
+			//int pri = 0;
+			//while (UMLsoldier.dequeue(tempSoldier,pri))
+			//{
+			//	//First Task of Output File
+			//	MyfileHandler << tempSoldier->getTd() << "\t" << tempSoldier->getid() << "\t" << tempSoldier->gettj() << "\t" << tempSoldier->getDf() << "\t" << tempSoldier->getDd() << "\t" << tempSoldier->getDb() << endl;
+			//	unit_type = tempSoldier->gettype();
+			//	if (unit_type == "Earth Soldier")
+			//	{
+			//		//cout << "I am Soldier hey \n";
+			//		Destrcuted[0] = Destrcuted[0] + 1;
+			//		//cout << Destrcuted[0];
+			//		sumOfDs[0] = sumOfDs[0] + temp->getDf();
+			//		sumOfDs[1] = sumOfDs[1] + temp->getDd();
+			//		sumOfDs[2] = sumOfDs[2] + temp->getDb();
+			//		CountOfEarth++;
+			//	}
+			//}
+			//ET* tempTank = NULL;
+			//while (UMLtank.dequeue(tempTank))
+			//{
+			//	//First Task of Output File
+			//	MyfileHandler << tempTank->getTd() << "\t" << tempTank->getid() << "\t" << tempTank->gettj() << "\t" << tempTank->getDf() << "\t" << tempTank->getDd() << "\t" << tempTank->getDb() << endl;
+			//	unit_type = tempTank->gettype();
+			//	if (unit_type == "Tank")
+			//	{
+			//		//cout << "I am Tank hey \n";
+			//		Destrcuted[1] = Destrcuted[1] + 1;
+			//		//cout << Destrcuted[1];
+			//		sumOfDs[0] = sumOfDs[0] + temp->getDf();
+			//		sumOfDs[1] = sumOfDs[1] + temp->getDd();
+			//		sumOfDs[2] = sumOfDs[2] + temp->getDb();
+			//		CountOfEarth++;
+			//	}
+			//}
 		}
 
 
@@ -469,26 +558,42 @@ bool GameManager::ProduceOutputFile()
 		MyfileHandler << "For Earth Army: " << endl;
 		MyfileHandler << "Total number of each unit\t" << Earth.get_ESCreated() << " ES\t" << Earth.get_ETCreated() << " ET\t" << Earth.get_EGCreated() << " EG\t" << Earth.get_EHCreated() << " EH\t" << endl;
 		MyfileHandler << "Percentage of  destructed units relative to their total\tES\tET\tEG\tEH" << endl;
-		MyfileHandler << "                                                       \t" << (Destrcuted[0] / Earth.get_ESCreated()) * 100 << "\t" << (Destrcuted[1] / Earth.get_ETCreated()) * 100 << "\t" << (Destrcuted[2] / Earth.get_EGCreated()) * 100 << "\t" << (Destrcuted[3] / Earth.get_EHCreated()) * 100 << "\n";
-		MyfileHandler << "Percentage of total destructed unit relative to total units\t" << (Destrcuted[0] + Destrcuted[1] + Destrcuted[2] + Destrcuted[3]) / (Earth.get_ESCreated() + Earth.get_ETCreated() + Earth.get_EGCreated() + Earth.get_EHCreated())*100<<endl;
+		MyfileHandler << "                                                       \t" << ((Earth.get_ESCreated() != 0) ? ((Destrcuted[0] / Earth.get_ESCreated()) * 100) : 0) << "\t" << ((Earth.get_ETCreated() != 0) ? ((Destrcuted[1] / Earth.get_ETCreated()) * 100) : 0) << "\t" << ((Earth.get_EGCreated() != 0) ? ((Destrcuted[2] / Earth.get_EGCreated()) * 100) : 0) << "\t" << (Earth.get_EHCreated() != 0 ? (Destrcuted[3] / Earth.get_EHCreated()) * 100 : 0) << "\n";
+		MyfileHandler << "Percentage of total destructed unit relative to total units\t" << ((Earth.get_ESCreated() + Earth.get_ETCreated() + Earth.get_EGCreated() + Earth.get_EHCreated()) != 0 ? ((Destrcuted[0] + Destrcuted[1] + Destrcuted[2] + Destrcuted[3]) / (Earth.get_ESCreated() + Earth.get_ETCreated() + Earth.get_EGCreated() + Earth.get_EHCreated()) * 100) : 0)<<endl;
+		MyfileHandler << "The Percentage Of Units Healed Successfully Relative to Total Earth Units Created\t" << ((Earth.gethealed_soldeir_count() + Earth.gethealed_Tank_count()) / ((Earth.get_ESCreated() + Earth.get_ETCreated() + Earth.get_EGCreated() + Earth.get_EHCreated()))) * 100<<endl;
 		MyfileHandler << "Average of Df\t" << "Average of Dd\t" << "Average of Db" << endl;
-		MyfileHandler <<"       " << sumOfDs[0] / CountOfEarth <<"       " << "\t" << sumOfDs[1] / CountOfEarth << "\t" << "       " << sumOfDs[2] / CountOfEarth << endl;
+		MyfileHandler <<"       " << (CountOfEarth != 0 ? (sumOfDs[0] / CountOfEarth) : 0) <<"       " << "\t" << (CountOfEarth != 0 ? (sumOfDs[1] / CountOfEarth) : 0) << "\t" << "       " << (CountOfEarth != 0 ? (sumOfDs[2] / CountOfEarth) : 0) << endl;
 		MyfileHandler << "Df/Db %" <<"\t" << "Dd/Db %\n";
-		MyfileHandler << sumOfDs[0] / sumOfDs[2] << "\t" << sumOfDs[1] / sumOfDs[2]<<endl;
+		MyfileHandler << (sumOfDs[2] != 0 ? (sumOfDs[0] / sumOfDs[2]) : 0) << "\t" << (sumOfDs[2] != 0 ? (sumOfDs[1] / sumOfDs[2]) : 0) <<endl;
 		MyfileHandler << endl << endl;
 		//-------------------------------------------For Alien Army Data-----------------------------------
 		MyfileHandler << "For Alien Army: " << endl;
 		MyfileHandler << "Total number of each unit \t" << Aliens.get_ASCreated() << " AS\t" << Aliens.get_AMCreated() << " AM\t" << Aliens.get_ADCreated() << " AD\t" <<endl;
 		MyfileHandler << "Percentage of  destructed units relative to their total\tAS\tAM\tAD" << endl;
-		MyfileHandler << "                                                       \t" << (Destrcuted[4] / Aliens.get_ASCreated()) * 100 << "\t" << (Destrcuted[5] / Aliens.get_AMCreated()) * 100 << "\t" << (Destrcuted[6] / Aliens.get_ADCreated()) * 100 <<"\n";
-		MyfileHandler << "Percentage of total destructed unit relative to total units\t" << (Destrcuted[4] + Destrcuted[5] + Destrcuted[6]) / (Aliens.get_ASCreated() + Aliens.get_AMCreated() + Aliens.get_ADCreated() ) * 100 << endl;
+		MyfileHandler << "                                                       \t" << (Aliens.get_ASCreated() != 0 ? (Destrcuted[4] / Aliens.get_ASCreated()) * 100 : 0) << "\t" << (Aliens.get_AMCreated() != 0 ? (Destrcuted[5] / Aliens.get_AMCreated()) * 100 : 0)<< "\t" << (Aliens.get_ADCreated() != 0 ? (Destrcuted[6] / Aliens.get_ADCreated()) * 100 : 0)<<"\n";
+		MyfileHandler << "Percentage of total destructed unit relative to total units\t" << ((Aliens.get_ASCreated() + Aliens.get_AMCreated() + Aliens.get_ADCreated()) != 0 ? ((Destrcuted[4] + Destrcuted[5] + Destrcuted[6]) / (Aliens.get_ASCreated() + Aliens.get_AMCreated() + Aliens.get_ADCreated())) * 100 : 0)<< endl;
 		MyfileHandler << "Average of Df\t" << "Average of Dd\t" << "Average of Db" << endl;
-		MyfileHandler << "       " << sumOfDs[3] / CountOfAlien << "       " << "\t" << sumOfDs[4] / CountOfAlien << "\t" << "       " << sumOfDs[5] / CountOfAlien << endl;
+		MyfileHandler << "       " << (CountOfAlien != 0 ? (sumOfDs[3] / CountOfAlien) : 0)<< "       " << "\t" << (CountOfAlien != 0 ? (sumOfDs[4] / CountOfAlien) : 0) << "\t" << "       " << (CountOfAlien != 0 ? (sumOfDs[5] / CountOfAlien) : 0) << endl;
 		MyfileHandler << "Df/Db %" << "\t" << "Dd/Db %\n";
-		MyfileHandler << sumOfDs[3] / sumOfDs[5] << "\t" << sumOfDs[4] / sumOfDs[5] << endl;
+		MyfileHandler << (sumOfDs[5] != 0 ? (sumOfDs[3] / sumOfDs[5]) : 0) << "\t" << (sumOfDs[5] != 0 ? (sumOfDs[4] / sumOfDs[5]) : 0)<< endl;
+		//--------------------------------------------For Saver Army------------------------------------------------------
+		MyfileHandler << "For Saver Army: " << endl;
+		MyfileHandler << "Total number of Saver unit \t"<<ally.getCounter()-3000<<endl;
+
+		MyfileHandler << "Percentage of total destructed unit relative to total units\t" << (ally.getCounter()-3000 != 0 ? (Destrcuted[7] / (ally.getCounter()-3000)) * 100 : 0) << endl;
+		MyfileHandler << "Average of Df\t" << "Average of Dd\t" << "Average of Db" << endl;
+		MyfileHandler << "       " << (CountOfSaver != 0 ? (sumOfDs[6] / CountOfSaver) : 0) << "       " << "\t" << (CountOfSaver != 0 ? (sumOfDs[7] / CountOfSaver) : 0) << "\t" << "       " << (CountOfSaver != 0 ? (sumOfDs[8] / CountOfSaver) : 0) << endl;
+		MyfileHandler << "Df/Db %" << "\t" << "Dd/Db %\n";
+		MyfileHandler << (sumOfDs[8] != 0 ? (sumOfDs[6] / sumOfDs[8]) : 0) << "\t" << (sumOfDs[8] != 0 ? (sumOfDs[7] / sumOfDs[8]) : 0) << endl;
+
 		
 		
-		//--------------------------------------------------------------------------------------------------
+		
+		//-------------------------------------------For Infected-----------------------------------
+		MyfileHandler << "For Infected Soldier: "<<endl;
+		MyfileHandler<<"Total number of infected Soldiers: \t" << Earth.getinfectioncount() << endl;
+		MyfileHandler << "Percantage of infected Soldiers: \t " << (Earth.get_ESCreated() != 0 ? Earth.getinfectioncount() / Earth.get_ESCreated() * 100 : 0);
+
 		cout << "Produced Output File Check it out";
 		return true;
 	}
@@ -571,23 +676,42 @@ void GameManager::simulate_phase2() {
 
 		while ((getTimestep() <= 40 || getBattleResult() == "Draw") && getTimestep() <= 500) {
 			RandGen.RandomUnitGenratorAlgortihm();
+			if (Earth.getinfection_Per() == 0) {
+				killally();
+			}
 			if (mode == "Interactive") {
 				print1();
 			}
+			
 			Earth.attack();
 			Aliens.attack();
+			ally.setInfectionPercentage(Earth.getinfection_Per());
 			ally.attack();
 			Earth.spreadinfection();
+			Earth.Calc_inf_Perc();
+			
 			if (mode == "Interactive") {
 				print2();
 				cout << "Press Enter to continue..." << endl;
 				cin.get();
 			}
-			if ((Earth.GetEGunnery().getcount() + Earth.GetETank().getcount() + Earth.GetESoldier().getcount()) == 0) {
-				setResult("Loss");
+			if ((Earth.GetEGunnery().getcount() + Earth.GetETank().getcount() + Earth.GetESoldier().getcount()+UMLsoldier.getcount()+UMLtank.getcount()) == 0) {
+				//setResult("Loss");
+				if (getTimestep() >40)
+				{
+					setResult("Loss");
+					break;
+
+				}
 			}
 			else if ((Aliens.GetADrone().getcount() + Aliens.GetAMonster().getcount() + Aliens.GetASoldier().getcount()) == 0) {
-				setResult("Win");
+				if (getTimestep() > 40)
+				{
+					setResult("Win");
+
+					break;
+
+				}
 			}
 			setTimestep(getTimestep() + 1);
 		}
@@ -597,4 +721,71 @@ void GameManager::simulate_phase2() {
 		SilentMode();
 	}
 	ProduceOutputFile();
+}
+
+int GameManager::getinf_thres()
+{
+	return inf_thres;
+}
+
+void GameManager::Color(int color)
+{
+	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), color);
+
+}
+
+void GameManager::gotoxy(int x, int y)
+{
+	COORD c;
+	c.X = x;
+	c.Y = y;
+	SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), c);
+}
+void GameManager::clearScreen()
+{
+	system("cls");
+}
+int GameManager::SelectSencario()
+{
+	clearScreen();
+	const int DEFAULT_COLOR = 7;
+	const int HIGHLIGHT_COLOR = 12;
+	const int NUM_OPTIONS = 6;
+	int Menu[NUM_OPTIONS] = { DEFAULT_COLOR, DEFAULT_COLOR, DEFAULT_COLOR, DEFAULT_COLOR, DEFAULT_COLOR, DEFAULT_COLOR };
+	int Counter = 0;
+	char key;
+
+	while (true) {
+		// Display menu options
+		for (int i = 0; i < NUM_OPTIONS; i++) {
+			gotoxy(0, i); // Start from the beginning of the console
+			Color(Menu[i]);
+			cout << "File Number " << i + 1 << "     "; // Add spaces to clear previous highlight
+		}
+
+		key = _getch(); // Wait for a key press
+
+		// Handle key presses
+		if (key == 72 && Counter > 0) { // Up arrow key
+			Counter--;
+		}
+		if (key == 80 && Counter < NUM_OPTIONS - 1) { // Down arrow key
+			Counter++;
+		}
+		if (key == '\r') { // Enter key
+			clearScreen();
+			gotoxy(0, 0); // Move to the beginning of the console
+			SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 12);
+			//cout << "You Have Selected File Number " << Counter + 1 << endl;
+			return Counter + 1;
+			break; // Exit the loop after selection
+		}
+
+		// Reset menu colors
+		for (int i = 0; i < NUM_OPTIONS; i++) {
+			Menu[i] = DEFAULT_COLOR;
+		}
+		Menu[Counter] = HIGHLIGHT_COLOR;
+	}
+	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 7);
 }

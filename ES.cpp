@@ -28,14 +28,6 @@ ES::ES(int h, int attackcap, int join, int p, int ID, GameManager* gm) {
 	setinfection(false);
 	setimmunity(false);
 }
-//void ES::setinfected(bool ifection)
-//{
-//	infected = ifection;
-//}
-//bool ES::getinfected()
-//{
-//	return infected;
-//}
 void ES::setimmunity(bool immunity)
 {
 	immune = immunity;

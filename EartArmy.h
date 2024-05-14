@@ -20,7 +20,10 @@ class EarthArmy {
 	int Ecounter;
 	bool critical;
 	int ES_Created, ET_Created, EG_Created,EH_Created;
+	double healed_soldeir_count;
+	double healed_Tanks_count;
 	double infection_Per;
+	double infection_count;
 public:
 	//Constructor to set the Counter
 	EarthArmy();
@@ -52,6 +55,15 @@ public:
 	void spreadinfection();
 	void Calc_inf_Perc();
 	double getinfection_Per();
+
+	void increment_inf();
+	double getinfectioncount();
+
+	double gethealed_soldeir_count();
+	double gethealed_Tank_count();
+
+	void increment_healed_soldeir();
+	void increment_healed_Tank();
 };
 
 

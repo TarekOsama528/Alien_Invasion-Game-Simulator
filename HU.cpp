@@ -50,6 +50,7 @@ void HU::attack() {
 					es->setimmunity(true);
 				}
 				getGM()->GetEarth()->addEsoldier(es);
+				getGM()->GetEarth()->increment_healed_Tank();
 			}
 			else {
 				soldierlist.enqueue(es,k);
@@ -77,6 +78,7 @@ void HU::attack() {
 			et->sethealth(et->gethealth() + imp);
 			if (et->gethealth() >= 20) {
 				getGM()->GetEarth()->addtank(et);
+				getGM()->GetEarth()->increment_healed_Tank();
 			}
 			else {
 				tanklist.enqueue(et);

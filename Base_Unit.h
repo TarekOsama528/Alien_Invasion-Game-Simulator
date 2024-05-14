@@ -23,6 +23,7 @@ protected:
 	int UAP;
 	bool infection;
 public:
+	Unit();
 	void setIH(int ih);
 	int getIH();
 	void setid(int id);
@@ -66,7 +67,9 @@ public:
 };
 
  static ostream& operator<<(ostream& display, Unit uni) {
-	display << uni.getid();
+	 
+
+	 display << uni.getid();
 	return display;
 }
  static ostream& operator<<(ostream& display, Unit* uni) {
@@ -77,9 +80,10 @@ public:
 	}
 	else {
 		display << uni->getid();
+		
 	}
 	return display;
-}
+	}
 
  //test
  //test2
