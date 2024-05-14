@@ -29,6 +29,7 @@ private:
 	string OpMode;
 	double inf_Prob;
 	int inf_thres;
+	
 
 public:
 	void killally();
@@ -59,7 +60,7 @@ public:
 	void SilentMode();
 	void simulate_phase2();
 	int getinf_thres();
-
+	int getFileNumber();
 	void print1();
 	void print2();
 	void Color(int Color);

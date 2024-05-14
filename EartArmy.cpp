@@ -173,7 +173,7 @@ void EarthArmy::spreadinfection()
 	LinkedQueue<ES*> inf_es_temp;
 	LinkedQueue<ES*> es_temp;
 	LinkedQueue<ES*> new_infected;
-	int healthy_index_array[1000];
+	int healthy_index_array[10000];
 	int infectedcount = 0;
 	int healthy_array_count=0;
 	int not_inf_index=0;
