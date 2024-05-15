@@ -64,7 +64,7 @@ void AM::attack() {
 				}
 			}
 		}
-		else if (i % 2 == 1 || getGM()->GetEarth()->GetESoldier().getcount() == 0 || getGM()->Getally()->getsaver().getcount() == 0) {
+		else if (i % 2 == 1 || getGM()->GetEarth()->GetESoldier().getcount() == 0 /*|| getGM()->Getally()->getsaver().getcount() == 0*/) {
 			et = NULL;
 			getGM()->GetEarth()->removetank(et);
 			if (et) {
